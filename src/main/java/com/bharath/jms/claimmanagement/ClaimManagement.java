@@ -22,11 +22,10 @@ public class ClaimManagement {
 				JMSContext jmsContext = cf.createContext();) {
 			
 			JMSProducer producer = jmsContext.createProducer();
-			JMSConsumer consumer = jmsContext.createConsumer(requestQueue, "");
-			
-			
+			JMSConsumer consumer = jmsContext.createConsumer(requestQueue, "hospitalId=1");
 			
 			ObjectMessage objectMessage = jmsContext.createObjectMessage();
+			objectMessage.setIntProperty("hospitalId", 1);
 			
 			Claim claim = new Claim();
 			claim.setHospitalId(1);
@@ -38,11 +37,8 @@ public class ClaimManagement {
 			
 			producer.send(requestQueue, objectMessage);
 			
-			
-			
-
+			Claim receiveBody = consumer.receiveBody(Claim.class);
+			System.out.println(receiveBody.getClaimAmount());
 		}
-		
 	}
-
 }
